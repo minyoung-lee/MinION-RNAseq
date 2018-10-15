@@ -27,7 +27,7 @@ cat RL | awk '{sum+=$1}END{print sum}'
 
 
 # read length distribution
-## 1. find the longest read in each fastq file
+## 1. find the longest read in the fastq file
 longest=0
 sort -h RL  | uniq -c > sorted
 x=`tail -n 1 sorted | tr -s ' ' | cut -d " " -f3`
@@ -37,10 +37,10 @@ longest=${x_longest}
 fi
 echo $longest
 
-## 2. Prepare stat_readlength file
+## 2. read length (0 to the longest read)
 for ((i=0;i<= ${longest} ;i++));do echo $i >> RL0_longest;done
 
-## 3. count read length distribution
+## 3. read length distribution
 x=`cat sorted | tr -s ' ' | cut -d " " -f3` 
 readLength=($x)
 y=`cat sorted | tr -s ' ' | cut -d " " -f2`
