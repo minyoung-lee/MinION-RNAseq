@@ -22,9 +22,48 @@ expr $a / 4
 
 
 # total number of bases
-cat RST1.fastq | awk '{if( (NR-2)%4==0){print length($1)}}' > RL
+cat RST2.fastq | awk '{if( (NR-2)%4==0){print length($1)}}' > RL
 cat RL | awk '{sum+=$1}END{print sum}'
-rm RL
+
+
+# read length distribution
+## 1. find the longest read in each fastq file
+longest=0
+sort -h RL  | uniq -c > sorted
+x=`tail -n 1 sorted | tr -s ' ' | cut -d " " -f3`
+x_longest=($x)
+if [ ${x_longest} -gt ${longest} ];then
+longest=${x_longest}
+fi
+echo $longest
+
+## 2. Prepare stat_readlength file
+for ((i=0;i<= ${longest} ;i++));do echo $i >> RL0_longest;done
+
+## 3. count read length distribution
+x=`cat sorted | tr -s ' ' | cut -d " " -f3` 
+readLength=($x)
+y=`cat sorted | tr -s ' ' | cut -d " " -f2`
+readCount=($y)
+N=`wc -l sorted | cut -d " " -f1`
+for ((i=0; i<=N; i++));
+do
+C[${readLength[i]}]="${readCount[i]}"
+done
+C[${readLength[0]}]="${readCount[0]}"
+
+cat sorted | tr -s ' ' | cut -d " " -f3 > readLength
+diff readLength RL0_longest | grep ">" | cut -d " " -f2 > i_nan.txt
+
+for i in `cat ./i_nan.txt`
+do
+C[i]="NaN"
+done
+
+echo -e ${C[*]} > tmp
+tr -s ' '  '\n'< tmp > RL_count
+paste RL0_longest RL_count > stat_readLength.txt
+rm RL sorted readLength i_nan.txt RL0_longest RL_count
 
 
 # fastq conversion
