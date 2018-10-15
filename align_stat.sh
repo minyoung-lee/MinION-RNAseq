@@ -22,3 +22,7 @@ cut -f3 readsMapped2RST2.txt > RNAME.txt
 cut -f4 readsMapped2RST2.txt > POS.txt
 cut -f5 readsMapped2RST2.txt > MAPQ.txt
 cut -f6 readsMapped2RST2.txt > CIGAR.txt
+cut -f10 readsMapped2RST2.txt > SEQ
+
+cat SEQ | awk '{print length}' > ReferenceSpan.txt
+
