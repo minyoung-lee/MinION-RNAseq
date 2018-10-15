@@ -4,7 +4,7 @@
 ~/bwa/bwa index -a bwtsw BbuRST2.180215.fasta
 
 
-# conversion gbk to gff
+# convert gbk to gff
 bp_genbank2gff3.pl BbuRST2.180215.gbk
 
 
@@ -14,7 +14,7 @@ a=`expr $a - 1`
 sed -n '1,'"$a"'p' BbuRST2.180215.gbk.gff > BbuRST2.180215.gbk_nofasta.gff
 
 
-# change gff RNAME to match with fasta file
+# modify gff RNAME to match with fasta file
 grep ">" BbuRST2.180215.fasta | cut -d" " -f1 | sort | sed 's/>//g' > RNAME_fasta
 cut -f1 BbuRST2.180215.gbk_nofasta.gff | sort | uniq > RNAME_gff
 paste RNAME_gff RNAME_fasta
