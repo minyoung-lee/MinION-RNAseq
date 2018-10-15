@@ -25,3 +25,7 @@ expr $a / 4
 cat RST1.fastq | awk '{if( (NR-2)%4==0){print length($1)}}' > RL
 cat RL | awk '{sum+=$1}END{print sum}'
 rm RL
+
+
+# fastq conversion
+sed -e s/U/T/g RST2.fastq > U2T_RST2.fastq
